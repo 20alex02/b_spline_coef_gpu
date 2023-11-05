@@ -1,3 +1,41 @@
+# CLion
+.idea/
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CMakeScripts/
+CMakeScripts/
+CMakeTmp/
+
+# Temporary build files
+CMakeFiles/
+CMakeScripts/
+CMakeCache.txt
+CMakeLists.txt.user
+
+# CLion workspace files
+workspace.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+
+# User-specific files
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+
+# User-specific files (Mac)
+.idea/navEditor.xml
+
+# C++ specific
+compile_commands.json
+CMakeUserPresets.json
+
+# Visual Studio Code specific
+.vscode/
+
 # Prerequisites
 *.d
 
