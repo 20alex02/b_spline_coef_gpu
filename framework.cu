@@ -5,6 +5,9 @@
 #define X 8192
 #define Y 8192
 
+//#define X 1024 // cols
+//#define Y 1152 // rows
+
 #include "kernel.cu"
 #include "kernel_CPU.C"
 
@@ -35,8 +38,10 @@ int main(int argc, char **argv) {
     in = (float *) malloc(X * Y * sizeof(in[0]));
     out = (float *) malloc(X * Y * sizeof(out[0]));
     out_gpu = (float *) malloc(X * Y * sizeof(out_gpu[0]));
-    for (int i = 0; i < X * Y; i++)
+    for (int i = 0; i < X * Y; i++) {
+//        in[i] = i;
         in[i] = (float) rand() / float(RAND_MAX);
+    }
 
     // allocate and set device memory
     if (cudaMalloc((void **) &din, X * Y * sizeof(in[0])) != cudaSuccess
@@ -55,8 +60,7 @@ int main(int argc, char **argv) {
     cudaEventSynchronize(stop);
     float time;
     cudaEventElapsedTime(&time, start, stop);
-    printf("CPU performance: %f megapixels/s\n",
-           float(X) * float(Y) / time / 1e3f);
+    printf("CPU performance: %f megapixels/s\n", float(X) * float(Y) / time / 1e3f);
 
     // solve on GPU
     printf("Solving on GPU...\n");
@@ -65,17 +69,17 @@ int main(int argc, char **argv) {
     cudaEventRecord(stop, 0);
     cudaEventSynchronize(stop);
     cudaEventElapsedTime(&time, start, stop);
-    printf("GPU performance: %f megapixels/s\n",
-           float(X) * float(Y) / time / 1e3f);
+    printf("GPU performance: %f megapixels/s\n", float(X) * float(Y) / time / 1e3f);
 
     // check GPU results
     cudaMemcpy(out_gpu, dout, X * Y * sizeof(dout[0]), cudaMemcpyDeviceToHost);
-    for (int i = 0; i < X * Y; i++)
+    for (int i = 0; i < X * Y; i++) {
         if ((out_gpu[i] != out_gpu[i]) ||
             (fabsf(out[i] - out_gpu[i]) > 0.0001f)) { /* out_gpu[i] != out_gpu[i] catches NaN */
             fprintf(stderr, "Data mismatch at index %i: %f should be %f :-(\n", i, out_gpu[i], out[i]);
             goto cleanup;
         }
+    }
     printf("Test OK.\n");
 
     cleanup:
