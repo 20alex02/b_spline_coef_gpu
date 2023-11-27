@@ -5,9 +5,6 @@
 #define X 8192
 #define Y 8192
 
-//#define X 1024 // cols
-//#define Y 1152 // rows
-
 #include "kernel.cu"
 #include "kernel_CPU.C"
 
@@ -39,7 +36,6 @@ int main(int argc, char **argv) {
     out = (float *) malloc(X * Y * sizeof(out[0]));
     out_gpu = (float *) malloc(X * Y * sizeof(out_gpu[0]));
     for (int i = 0; i < X * Y; i++) {
-//        in[i] = i;
         in[i] = (float) rand() / float(RAND_MAX);
     }
 
@@ -65,7 +61,7 @@ int main(int argc, char **argv) {
     // solve on GPU
     printf("Solving on GPU...\n");
     cudaEventRecord(start, 0);
-    solveGPU(din, dout, X, Y);
+    solveGPU(&din, &dout, X, Y);
     cudaEventRecord(stop, 0);
     cudaEventSynchronize(stop);
     cudaEventElapsedTime(&time, start, stop);
